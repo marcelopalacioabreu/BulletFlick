@@ -6,7 +6,7 @@ using UnityEngine;
 //place this class on the player root
 public class MouseLook : MonoBehaviour {
 
-	public Transform playerCamera;
+	
 
 	public float sensitivityX = 5f;
 	public float sensitivityY = 2f;
@@ -17,8 +17,13 @@ public class MouseLook : MonoBehaviour {
 	public float maximumY = 60f;
 	public float minimumY = -60f;
 
-	private float rotationX = 0f;
-	private float rotationY = 0f;
+	public CursorLockMode cursorLockMode = CursorLockMode.Locked;
+
+	[SerializeField]
+	private Transform playerCamera;
+
+	private float curRotationX = 0f;
+	private float curRotationY = 0f;
 
 	//Use body for x and camera for y
 	private Quaternion curBodyRotation;
@@ -30,17 +35,27 @@ public class MouseLook : MonoBehaviour {
 	}
 		
 	void Update () {
-		rotationX += Input.GetAxis("Mouse X") * sensitivityX;
-		rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			cursorLockMode = CursorLockMode.None;
+		} 
+		else if (Input.GetMouseButtonDown (0)) {
+			//TODO change to constants
+			cursorLockMode = CursorLockMode.Locked;
+		}
 
-		rotationX = ClampAngle (rotationX, minimumX, maximumX);
-		rotationY = ClampAngle (rotationY, minimumY, maximumY);
+		Cursor.lockState = cursorLockMode;
 
-		Quaternion xQuaternion = Quaternion.AngleAxis (rotationX, Vector3.up);
-		Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, Vector3.left);
+		curRotationX += Input.GetAxis("Mouse X") * sensitivityX;
+		curRotationY += Input.GetAxis("Mouse Y") * sensitivityY;
 
-		transform.localRotation = curBodyRotation * xQuaternion;	
-		playerCamera.localRotation = curCameraRotation * yQuaternion;
+		curRotationX = ClampAngle (curRotationX, minimumX, maximumX);
+		curRotationY = ClampAngle (curRotationY, minimumY, maximumY);
+
+		Quaternion xQuaternion = Quaternion.AngleAxis (curRotationX, Vector3.up);
+		Quaternion yQuaternion = Quaternion.AngleAxis (curRotationY, Vector3.left);
+
+		//transform.localRotation = curBodyRotation * xQuaternion *;	
+		playerCamera.localRotation = curCameraRotation * xQuaternion * yQuaternion;
 	}
 
 	public static float ClampAngle (float angle, float min, float max) {

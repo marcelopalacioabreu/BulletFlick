@@ -5,9 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMove : MonoBehaviour {
 
-	public float speed = 3.0f;
+	private const float Gravity = 9.8f;
 
+	
+
+	public float speed = 3.0f;
+	public float jumpSpeed = 5.0f;
+
+	[SerializeField]
+	private Transform playerCamera;
 	private CharacterController controller;
+	private Vector3 moveDirection;
 	// Use this for initialization
 	void Start () {
 		controller = GetComponent<CharacterController> ();
@@ -15,8 +23,15 @@ public class PlayerMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//get player input and make it into global vector
-		Vector3 moveVec = transform.TransformDirection(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		controller.SimpleMove (moveVec * speed);
+		if (controller.isGrounded) {
+			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			moveDirection = playerCamera.transform.TransformDirection(moveDirection);
+			moveDirection *= speed;
+			if (Input.GetButton ("Jump")) {
+				moveDirection.y = jumpSpeed;
+			}
+		}
+		moveDirection.y -= Gravity * Time.deltaTime;
+		controller.Move(moveDirection * Time.deltaTime);
 	}
 }
