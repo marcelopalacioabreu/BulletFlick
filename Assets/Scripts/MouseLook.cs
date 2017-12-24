@@ -35,9 +35,11 @@ namespace BulletFlick {
         void Update () {
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 cursorLockMode = CursorLockMode.None;
+                Cursor.visible = true;
             } else if (Input.GetMouseButtonDown(0)) {
                 //TODO change to constants
                 cursorLockMode = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
 
             Cursor.lockState = cursorLockMode;

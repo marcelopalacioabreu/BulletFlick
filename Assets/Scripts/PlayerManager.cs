@@ -9,8 +9,7 @@ public class ToggleEvent : UnityEvent<bool> { }
 
 public class PlayerManager : Photon.MonoBehaviour {
 
-    [SerializeField]
-    private ToggleEvent onToggleLocal;
+    [SerializeField] private ToggleEvent onToggleLocal;
 
     private GameObject defaultCamera;
 

@@ -12,6 +12,8 @@ namespace BulletFlick {
         [SerializeField] private float maxCurve = 1f;
         [SerializeField] private float raycastLength = 0.2f;
 
+        [SerializeField] private int bodyDamage = 50;
+        [SerializeField] private int headDamage = 100;
         private Vector3 bulletCurve;
         private Rigidbody bulletRigidbody;
         private TrailRenderer trailRenderer;
@@ -51,7 +53,7 @@ namespace BulletFlick {
 
         void OnCollisionEnter (Collision collision) {
             if (!collision.gameObject.CompareTag("Gun")) {
-                Hit(collision.transform.root.gameObject);
+                Hit(collision.gameObject);
             }
         }
 
@@ -60,13 +62,18 @@ namespace BulletFlick {
 
             //TODO: replace magic number
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, raycastLength)) {
-                Hit(hit.transform.root.gameObject);
+                Hit(hit.transform.gameObject);
             }
         }
 
         private void Hit (GameObject other) {
-            if (isDamageBullet && other.CompareTag("Player")) {
-                other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, 50);
+            if (isDamageBullet && other.transform.root.CompareTag("Player")) {
+                if (other.CompareTag("Head")) {
+                    other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, bodyDamage);
+                } else {
+                    other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, headDamage);
+                }
+                
             }
             gameObject.SetActive(false);
         }
