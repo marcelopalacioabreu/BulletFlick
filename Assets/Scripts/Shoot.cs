@@ -28,26 +28,29 @@ namespace BulletFlick {
             currentCoolTime -= Time.deltaTime;
             if (Input.GetMouseButtonDown(0) && currentCoolTime <= 0) {
                 //have bullet be shot but dont do hit detection on it
-                photonView.RPC("ShootVisualBullet", PhotonTargets.Others);
+                Vector3 bulletCurve = EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) * Time.deltaTime;
+                photonView.RPC("ShootVisualBullet", PhotonTargets.Others, bulletCurve, exitPoint.transform.position, exitPoint.transform.rotation);
                 //spawn local bullet that does damage
-                ShootDamageBullet();
+                ShootDamageBullet(bulletCurve);
             }
 
             lastGunRotation = arm.transform.localRotation;
         }
 
-        private void ShootDamageBullet() {
+        private void ShootDamageBullet(Vector3 bulletCurve) {
             GameObject bullet = GetBullet();
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-            bulletComponent.Init(EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) * Time.deltaTime, true);
+            bulletComponent.Init(bulletCurve, true);
             currentCoolTime = cooldownTime;
         }
         
         [PunRPC]
-        private void ShootVisualBullet() {
+        private void ShootVisualBullet(Vector3 bulletCurve, Vector3 bulletPosition, Quaternion bulletRotation) {
             GameObject bullet = GetBullet();
+            bullet.transform.position = bulletPosition;
+            bullet.transform.rotation = bulletRotation;
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-            bulletComponent.Init(EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) * Time.deltaTime, false);
+            bulletComponent.Init(bulletCurve, false);
             currentCoolTime = cooldownTime;
         }
 

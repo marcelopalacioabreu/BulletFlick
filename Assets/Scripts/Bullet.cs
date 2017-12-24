@@ -43,12 +43,7 @@ namespace BulletFlick {
 
         // Update is called once per frame
         void Update () {
-            if (Time.time >= startTime + bulletLifeLength) {
-                gameObject.SetActive(false);
-            } else {
-                bulletRigidbody.velocity = transform.forward * bulletSpeed;
-                transform.Rotate(bulletCurve * bulletCurveMultiplyer);
-            }
+            
         }
 
         void OnCollisionEnter (Collision collision) {
@@ -58,6 +53,14 @@ namespace BulletFlick {
         }
 
         void FixedUpdate () {
+            //TODO: bulletmultiplyer curve
+            if (Time.time >= startTime + bulletLifeLength) {
+                gameObject.SetActive(false);
+            } else {
+                bulletRigidbody.velocity = transform.forward * bulletSpeed;
+                transform.Rotate(bulletCurve * bulletCurveMultiplyer);
+            }
+
             RaycastHit hit;
 
             //TODO: replace magic number
@@ -67,13 +70,14 @@ namespace BulletFlick {
         }
 
         private void Hit (GameObject other) {
-            if (isDamageBullet && other.transform.root.CompareTag("Player")) {
+            GameObject root = other.transform.root.gameObject;
+            if (isDamageBullet && root.CompareTag("Player")) {
                 if (other.CompareTag("Head")) {
-                    other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, bodyDamage);
+                    root.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, headDamage);
                 } else {
-                    other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, headDamage);
+                    root.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, bodyDamage);
                 }
-                
+
             }
             gameObject.SetActive(false);
         }
