@@ -6,10 +6,9 @@ using UnityEngine;
 namespace BulletFlick {
     public class ArmMove : MonoBehaviour {
 
-        public float armSpeed;
+        [SerializeField] private float armSpeed;
 
-        [SerializeField]
-        private Transform playerCamera;
+        [SerializeField] private Transform playerCamera;
 
         // Use this for initialization
         void Start () {

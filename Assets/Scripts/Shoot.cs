@@ -5,18 +5,14 @@ using UnityEngine;
 namespace BulletFlick {
     public class Shoot : Photon.MonoBehaviour {
 
-
-        public float cooldownTime = 1f;
-
-        [SerializeField]
-        private GameObject arm;
-        [SerializeField]
-        private GameObject bulletPrefab;
-        [SerializeField]
-        private Transform exitPoint;
+        [SerializeField] private GameObject arm;
+        [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private Transform exitPoint;
 
         private List<GameObject> bulletPool;
         private Quaternion lastGunRotation;
+
+        private float cooldownTime = 1f;
         private float currentCoolTime;
 
 

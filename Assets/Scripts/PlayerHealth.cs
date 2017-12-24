@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : Photon.MonoBehaviour {
 
-    public float initialHealth = 100;
+    private float initialHealth = 100;
     private float currentHealth;
 
     private PlayerManager playerManager;
@@ -25,13 +25,9 @@ public class PlayerHealth : Photon.MonoBehaviour {
 
     [PunRPC]
     public void Damage (int damage) {
-        initialHealth -= damage;
-        if (initialHealth <= 0) {
-            Die();
+        currentHealth -= damage;
+        if (currentHealth <= 0) {
+            playerManager.Die();
         }
-    }
-
-    private void Die() {
-        playerManager.DisablePlayer();
     }
 }

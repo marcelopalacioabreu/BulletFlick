@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 namespace BulletFlick {
     public class Launcher : Photon.PunBehaviour {
 
-        public byte maxPlayers = 4;
+        [SerializeField] private byte maxPlayers = 4;
 
         private string gameVersion = "1";
 

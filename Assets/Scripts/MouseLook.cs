@@ -6,19 +6,19 @@ namespace BulletFlick {
     //place this class on the player root
     public class MouseLook : MonoBehaviour {
 
-        public float sensitivityX = 5f;
-        public float sensitivityY = 2f;
 
-        public float maximumX = 360f;
-        public float minimumX = -360f;
+        [SerializeField] private float sensitivityX = 5f;
+        [SerializeField] private float sensitivityY = 2f;
 
-        public float maximumY = 60f;
-        public float minimumY = -60f;
+        [SerializeField] private float maximumX = 360f;
+        [SerializeField] private float minimumX = -360f;
 
-        public CursorLockMode cursorLockMode = CursorLockMode.Locked;
+        [SerializeField] private float maximumY = 60f;
+        [SerializeField] private float minimumY = -60f;
 
-        [SerializeField]
-        private Transform playerCamera;
+        [SerializeField] private CursorLockMode cursorLockMode = CursorLockMode.Locked;
+
+        [SerializeField] private Transform playerCamera;
 
         private float curRotationX = 0f;
         private float curRotationY = 0f;

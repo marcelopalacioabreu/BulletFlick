@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Photon.PunBehaviour {
 
-    [SerializeField]
-    private GameObject playerPrefab;
+    [SerializeField] private GameObject playerPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -24,5 +23,16 @@ public class GameManager : Photon.PunBehaviour {
 
     public void LeaveRoom() {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void Respawn() {
+        StartCoroutine(RespawnCoroutine());
+    }
+
+    private IEnumerator RespawnCoroutine () {
+        Debug.Log("Spawn Start");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Spawn");
+        PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0, 10, 0), Quaternion.identity, 0);
     }
 }

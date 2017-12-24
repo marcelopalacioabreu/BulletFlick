@@ -6,25 +6,17 @@ namespace BulletFlick {
 
     public class Bullet : MonoBehaviour {
 
-        [SerializeField]
-        private float bulletSpeed = .01f;
-        [SerializeField]
-        private float bulletCurveMultiplyer = 10f;
-        [SerializeField]
-        private float bulletLifeLength = 3f;
-        [SerializeField]
-        private float maxCurve = 1f;
-        [SerializeField]
-        private float raycastLength = 0.2f;
+        [SerializeField] private float bulletSpeed = .01f;
+        [SerializeField] private float bulletCurveMultiplyer = 10f;
+        [SerializeField] private float bulletLifeLength = 3f;
+        [SerializeField] private float maxCurve = 1f;
+        [SerializeField] private float raycastLength = 0.2f;
 
-        public Vector3 bulletCurve;
-
+        private Vector3 bulletCurve;
         private Rigidbody bulletRigidbody;
-
         private TrailRenderer trailRenderer;
 
         private float startTime;
-
         private bool isDamageBullet;
 
         public void Init (Vector3 bulletCurve, bool isDamageBullet) {
@@ -73,10 +65,8 @@ namespace BulletFlick {
         }
 
         private void Hit (GameObject other) {
-            Debug.Log("Hello");
             if (isDamageBullet && other.CompareTag("Player")) {
                 other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, 50);
-                Debug.Log("Damage");
             }
             gameObject.SetActive(false);
         }
