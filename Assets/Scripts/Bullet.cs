@@ -14,6 +14,8 @@ namespace BulletFlick {
         private float bulletLifeLength = 3f;
         [SerializeField]
         private float maxCurve = 1f;
+        [SerializeField]
+        private float raycastLength = 0.2f;
 
         public Vector3 bulletCurve;
 
@@ -22,8 +24,27 @@ namespace BulletFlick {
         private TrailRenderer trailRenderer;
 
         private float startTime;
-        void Start () {
 
+        private bool isDamageBullet;
+
+        public void Init (Vector3 bulletCurve, bool isDamageBullet) {
+            if (!bulletRigidbody) {
+                bulletRigidbody = GetComponent<Rigidbody>();
+            }
+            if (!trailRenderer) {
+                trailRenderer = GetComponent<TrailRenderer>();
+            }
+            bulletRigidbody.velocity = Vector3.zero;
+            bulletRigidbody.angularVelocity = Vector3.zero;
+
+            bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.x));
+            bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.y));
+            bulletCurve.z = 0;
+            this.bulletCurve = bulletCurve;
+            this.isDamageBullet = isDamageBullet;
+            startTime = Time.time;
+
+            trailRenderer.Clear();
         }
 
         // Update is called once per frame
@@ -38,36 +59,26 @@ namespace BulletFlick {
 
         void OnCollisionEnter (Collision collision) {
             if (!collision.gameObject.CompareTag("Gun")) {
-                gameObject.SetActive(false);
+                Hit(collision.transform.root.gameObject);
             }
         }
 
         void FixedUpdate () {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), .2f)) {
-                Debug.Log("Hit");
-                gameObject.SetActive(false);
+            //TODO: replace magic number
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, raycastLength)) {
+                Hit(hit.transform.root.gameObject);
             }
         }
 
-        public void Init (Vector3 bulletCurve) {
-            if (!bulletRigidbody) {
-                bulletRigidbody = GetComponent<Rigidbody>();
+        private void Hit (GameObject other) {
+            Debug.Log("Hello");
+            if (isDamageBullet && other.CompareTag("Player")) {
+                other.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, 50);
+                Debug.Log("Damage");
             }
-            if (!trailRenderer) {
-                trailRenderer = GetComponent<TrailRenderer>();
-            }
-            bulletRigidbody.velocity = Vector3.zero;
-            bulletRigidbody.angularVelocity = Vector3.zero;
-
-            bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.x));
-            bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.y));
-            bulletCurve.z = 0;
-            this.bulletCurve = bulletCurve;
-            startTime = Time.time;
-
-            trailRenderer.Clear();
+            gameObject.SetActive(false);
         }
     }
 }

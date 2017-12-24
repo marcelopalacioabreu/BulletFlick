@@ -27,10 +27,17 @@ public class PlayerManager : Photon.MonoBehaviour {
 		
 	}
 
-    void EnablePlayer () {
+    public void EnablePlayer () {
         if (photonView.isMine) {
             defaultCamera.SetActive(false);
             onToggleLocal.Invoke(true);
+        }
+    }
+
+    public void DisablePlayer () {
+        if (photonView.isMine) {
+            defaultCamera.SetActive(true);
+            onToggleLocal.Invoke(false);
         }
     }
 }
