@@ -5,9 +5,11 @@ using UnityEngine;
 namespace BulletFlick {
 
     public class Bullet : MonoBehaviour {
-
-        [SerializeField] private float bulletSpeed = .01f;
-        [SerializeField] private float bulletCurveMultiplyer = 10f;
+         
+        [SerializeField] private float bulletSpeed = 40f;
+        /*using animationcurve as a curve for multiplyer
+         * x represents original bulletcurve y represents multipyer */
+        [SerializeField] private AnimationCurve curveMultiplyer;
         [SerializeField] private float bulletLifeLength = 3f;
         [SerializeField] private float maxCurve = 1f;
         [SerializeField] private float raycastLength = 0.2f;
@@ -30,9 +32,8 @@ namespace BulletFlick {
             }
             bulletRigidbody.velocity = Vector3.zero;
             bulletRigidbody.angularVelocity = Vector3.zero;
-
-            bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.x));
-            bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(maxCurve, Mathf.Abs(bulletCurve.y));
+            bulletCurve.x = Mathf.Sign(bulletCurve.x) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.x)) * maxCurve;
+            bulletCurve.y = Mathf.Sign(bulletCurve.y) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.y)) * maxCurve;
             bulletCurve.z = 0;
             this.bulletCurve = bulletCurve;
             this.isDamageBullet = isDamageBullet;
@@ -58,7 +59,7 @@ namespace BulletFlick {
                 gameObject.SetActive(false);
             } else {
                 bulletRigidbody.velocity = transform.forward * bulletSpeed;
-                transform.Rotate(bulletCurve * bulletCurveMultiplyer);
+                transform.Rotate(bulletCurve);
             }
 
             RaycastHit hit;
