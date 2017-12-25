@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 33877852410315090}
   - component: {fileID: 135202307204969568}
   - component: {fileID: 23979890186925730}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Head
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967039
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -710,6 +710,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: ToggleEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  playerBody: {fileID: 1766526481423568}
 --- !u!114 &114972986684200058
 MonoBehaviour:
   m_ObjectHideFlags: 1

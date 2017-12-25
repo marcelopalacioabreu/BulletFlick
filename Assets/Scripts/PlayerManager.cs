@@ -11,15 +11,23 @@ public class PlayerManager : Photon.MonoBehaviour {
 
     [SerializeField] private ToggleEvent onToggleLocal;
 
+    [SerializeField] private GameObject playerBody;
+
     private GameObject defaultCamera;
 
     private GameManager gameManager;
+
+
+
 
     // Use this for initialization
     void Start () {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         if (photonView.isMine) {
             defaultCamera = Camera.main.gameObject;
+            playerBody.layer = LayerMask.NameToLayer("My Player");
+        } else {
+            playerBody.layer = LayerMask.NameToLayer("Other Player");
         }
         EnablePlayer();
         gameManager.AddPlayer(photonView.ownerId,gameObject);

@@ -74,7 +74,6 @@ public class GameManager : Photon.PunBehaviour {
     }
 
     private IEnumerator RespawnCoroutine () {
-        Debug.Log("Spawn Start");
         yield return new WaitForSeconds(1f);
         Debug.Log("Spawn");
         Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
