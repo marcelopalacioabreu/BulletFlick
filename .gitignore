@@ -5,6 +5,9 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
+PhotonServerSettings.asset
+PhotonServerSettings.asset.meta
+
 # Visual Studio 2015 cache directory
 /.vs/
 
