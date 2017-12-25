@@ -22,6 +22,7 @@ public class PlayerManager : Photon.MonoBehaviour {
             defaultCamera = Camera.main.gameObject;
         }
         EnablePlayer();
+        gameManager.AddPlayer(photonView.ownerId,gameObject);
     }
 
     // Update is called once per frame
@@ -33,6 +34,7 @@ public class PlayerManager : Photon.MonoBehaviour {
         if (photonView.isMine) {
             gameManager.Respawn();
         }
+        gameManager.RemovePlayer(photonView.ownerId);
         DisablePlayer();
     }
 
