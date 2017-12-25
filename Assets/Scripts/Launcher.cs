@@ -42,7 +42,7 @@ namespace BulletFlick {
         }
 
         public override void OnJoinedRoom () {
-            SceneManager.LoadScene("Test");
+            SceneManager.LoadScene("Castle");
         }
 
         public override void OnPhotonRandomJoinFailed (object[] codeAndMsg) {

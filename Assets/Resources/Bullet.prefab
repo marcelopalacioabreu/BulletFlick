@@ -232,7 +232,7 @@ MonoBehaviour:
     m_RotationOrder: 0
   bulletLifeLength: 3
   maxCurve: 2
-  raycastLength: 0.2
+  raycastLength: 0.85
   bodyDamage: 50
   headDamage: 100
 --- !u!135 &135093248327218950

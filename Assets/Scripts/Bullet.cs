@@ -12,7 +12,7 @@ namespace BulletFlick {
         [SerializeField] private AnimationCurve curveMultiplyer;
         [SerializeField] private float bulletLifeLength = 3f;
         [SerializeField] private float maxCurve = 1f;
-        [SerializeField] private float raycastLength = 0.2f;
+        [SerializeField] private float raycastLength = 0.85f;
 
         [SerializeField] private int bodyDamage = 50;
         [SerializeField] private int headDamage = 100;
@@ -80,6 +80,7 @@ namespace BulletFlick {
                 }
 
             }
+            Debug.Log("Hit");
             gameObject.SetActive(false);
         }
     }
