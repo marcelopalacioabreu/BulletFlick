@@ -65,7 +65,9 @@ namespace BulletFlick {
             RaycastHit hit;
 
             //TODO: replace magic number
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, raycastLength)) {
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward),
+                out hit, raycastLength)) {
+
                 Hit(hit.transform.gameObject);
             }
         }
@@ -74,9 +76,11 @@ namespace BulletFlick {
             GameObject root = other.transform.root.gameObject;
             if (isDamageBullet && root.CompareTag("Player")) {
                 if (other.CompareTag("Head")) {
-                    root.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, headDamage);
+                    root.GetComponent<PhotonView>()
+                        .RPC("Damage", PhotonTargets.All, headDamage, PhotonNetwork.player.ID);
                 } else {
-                    root.GetComponent<PhotonView>().RPC("Damage", PhotonTargets.All, bodyDamage);
+                    root.GetComponent<PhotonView>()
+                        .RPC("Damage", PhotonTargets.All, bodyDamage, PhotonNetwork.player.ID);
                 }
 
             }

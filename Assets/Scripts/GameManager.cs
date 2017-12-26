@@ -29,15 +29,16 @@ public class GameManager : Photon.PunBehaviour {
         playerProperties["kills"] = 0;
         playerProperties["deaths"] = 0;
         PhotonNetwork.player.SetCustomProperties(playerProperties);
-        if (PhotonNetwork.player.NickName.Equals("")) {
-            PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
-        }
+        PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
+        Debug.Log("Set name: " + PhotonNetwork.player.NickName);
     }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    
 
     public void AddPlayer(int id, GameObject player) {
         players[id] = player;
@@ -46,7 +47,7 @@ public class GameManager : Photon.PunBehaviour {
     public void RemovePlayer(int id) {
         players.Remove(id);
     }
-
+    //TODO add on disconnect listener
     public void OnLeftRoom() {
         SceneManager.LoadScene("Launcher");
     }
@@ -59,8 +60,25 @@ public class GameManager : Photon.PunBehaviour {
         StartCoroutine(RespawnCoroutine());
     }
 
+    private void OnPhotonPlayerDisconnected (PhotonPlayer otherPlayer) {
+        RemovePlayer(otherPlayer.ID);
+    }
+
+    private void OnPhotonPlayerPropertiesChanged (object[] playerAndUpdatedProps) {
+        if (!PhotonNetwork.isMasterClient) {
+            return;
+        }
+        Debug.Log("Change");
+        Hashtable updatedProperties = (Hashtable)playerAndUpdatedProps[1];
+        if (updatedProperties.ContainsKey("kills")) {
+            if ((int)updatedProperties["kills"] >= 30) {
+                Debug.Log("Winner is " + ((PhotonPlayer)playerAndUpdatedProps[1]).NickName);
+            }
+        }
+    }
+
     private GameObject FindBestSpawnPoint() {
-        if(players.Count == 0) {
+        if (players.Count == 0) {
             return spawnPoints[Random.Range(0, spawnPoints.Count)];
         }
 
@@ -68,12 +86,12 @@ public class GameManager : Photon.PunBehaviour {
         GameObject bestSpawnPoint = null;
         foreach (GameObject spawnPoint in spawnPoints) {
             float sum = 0;
-            foreach(KeyValuePair<int,GameObject> player in players) {
+            foreach (KeyValuePair<int,GameObject> player in players) {
                 sum += Vector3.Distance(player.Value.transform.position, spawnPoint.transform.position);
             }
             float avg = sum / players.Count;
             Debug.Log(avg);
-            if(avg >= maxAvgDistance) {
+            if (avg >= maxAvgDistance) {
                 maxAvgDistance = avg;
                 bestSpawnPoint = spawnPoint;
             }
@@ -82,9 +100,10 @@ public class GameManager : Photon.PunBehaviour {
     }
 
     private IEnumerator RespawnCoroutine () {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         Debug.Log("Spawn");
         Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
+        AddPlayer(PhotonNetwork.player.ID, player);
     }
 }

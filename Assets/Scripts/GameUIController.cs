@@ -21,6 +21,7 @@ public class GameUIController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.Tab)) {
+            UpdateScoreboard();
             scoreboard.SetActive(true);
         } else if(Input.GetKeyUp(KeyCode.Tab)) {
             scoreboard.SetActive(false);
@@ -29,15 +30,19 @@ public class GameUIController : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Escape)) {
             showMenu = !showMenu;
         }
-
-        UpdateScoreboard();
 	}
 
     public void UpdateScoreboard() {
         StringBuilder text = new StringBuilder();
-        foreach(PhotonPlayer player in PhotonNetwork.playerList) {
-            text.Append(player.NickName + " ");
-            text.Append(player.CustomProperties["kills"] + "/" + player.CustomProperties["deaths"]+"\n");
+        text.Append(PhotonNetwork.playerName + " ");
+        text.Append(PhotonNetwork.player.CustomProperties["kills"] + "/");
+        text.Append(PhotonNetwork.player.CustomProperties["deaths"] + "\n");
+        foreach (PhotonPlayer player in PhotonNetwork.playerList) {
+            if (player.ID != PhotonNetwork.player.ID) {
+                text.Append(player.NickName + " ");
+                text.Append(player.CustomProperties["kills"] + "/");
+                text.Append(player.CustomProperties["deaths"] + "\n");
+            }
         }
         scoreboardText.text = text.ToString();
     }

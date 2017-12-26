@@ -18,12 +18,6 @@ public class PlayerManager : Photon.MonoBehaviour {
 
     private GameManager gameManager;
 
-    private GameObject uiRoot;
-
-
-
-
-    // Use this for initialization
     void Start () {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         if (photonView.isMine) {
@@ -35,8 +29,7 @@ public class PlayerManager : Photon.MonoBehaviour {
         EnablePlayer();
         gameManager.AddPlayer(photonView.ownerId,gameObject);
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate () {
     }
 
@@ -54,12 +47,9 @@ public class PlayerManager : Photon.MonoBehaviour {
                 PhotonPlayer killer = PhotonPlayer.Find(killerId);
                 Hashtable killerProperties = killer.CustomProperties;
                 killerProperties["kills"] = ((int)killerProperties["kills"]) + 1;
-                if((int)killerProperties["kills"] > 30) {
-                    Debug.Log(killer.NickName + " Won!");
-                }
                 killer.SetCustomProperties(killerProperties);
-                gameManager.Respawn();
             }
+            gameManager.Respawn();
         }
         gameManager.RemovePlayer(photonView.ownerId);
         DisablePlayer();
