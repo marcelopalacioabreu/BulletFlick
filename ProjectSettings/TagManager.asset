@@ -7,6 +7,8 @@ TagManager:
   - Gun
   - GameManager
   - Head
+  - UI
+  - Scoreboard
   layers:
   - Default
   - TransparentFX

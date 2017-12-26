@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 [System.Serializable]
 public class ToggleEvent : UnityEvent<bool> { }
@@ -16,6 +17,8 @@ public class PlayerManager : Photon.MonoBehaviour {
     private GameObject defaultCamera;
 
     private GameManager gameManager;
+
+    private GameObject uiRoot;
 
 
 
@@ -34,13 +37,26 @@ public class PlayerManager : Photon.MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-
+    void FixedUpdate () {
     }
 
-    public void Die () {
+    public void Die (int killerId) {
         if (photonView.isMine) {
-            gameManager.Respawn();
+            Hashtable deadProperties = PhotonNetwork.player.CustomProperties;
+            int deaths = 0;
+            if (deadProperties.ContainsKey("deaths")) {
+                deaths = (int)deadProperties["deaths"];
+            }
+            deadProperties["deaths"] = deaths + 1;
+            PhotonNetwork.player.SetCustomProperties(deadProperties);
+
+            if (killerId != -1) { 
+                PhotonPlayer killer = PhotonPlayer.Find(killerId);
+                Hashtable killerProperties = killer.CustomProperties;
+                killerProperties["kills"] = ((int)killerProperties["kills"]) + 1;
+                killer.SetCustomProperties(killerProperties);
+                gameManager.Respawn();
+            }
         }
         gameManager.RemovePlayer(photonView.ownerId);
         DisablePlayer();

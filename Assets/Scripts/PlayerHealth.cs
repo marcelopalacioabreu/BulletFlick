@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerHealth : Photon.MonoBehaviour {
 
@@ -19,15 +20,17 @@ public class PlayerHealth : Photon.MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-
+    void FixedUpdate () {
+        if(transform.position.y < 0) {
+            photonView.RPC("Damage", PhotonTargets.All, 100, -1);
+        }
     }
 
     [PunRPC]
-    public void Damage (int damage) {
+    public void Damage (int damage, int playerId) {
         currentHealth -= damage;
         if (currentHealth <= 0) {
-            playerManager.Die();
+            playerManager.Die(playerId);
         }
     }
 }

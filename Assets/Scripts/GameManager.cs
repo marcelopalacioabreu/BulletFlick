@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameManager : Photon.PunBehaviour {
 
@@ -24,6 +25,13 @@ public class GameManager : Photon.PunBehaviour {
         }
         Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
         PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
+        Hashtable playerProperties = new Hashtable();
+        playerProperties["kills"] = 0;
+        playerProperties["deaths"] = 0;
+        PhotonNetwork.player.SetCustomProperties(playerProperties);
+        if (PhotonNetwork.player.NickName.Equals("")) {
+            PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
+        }
     }
 	
 	// Update is called once per frame
@@ -56,7 +64,7 @@ public class GameManager : Photon.PunBehaviour {
             return spawnPoints[Random.Range(0, spawnPoints.Count)];
         }
 
-        float minAvgDistance = float.MaxValue;
+        float maxAvgDistance = 0;
         GameObject bestSpawnPoint = null;
         foreach (GameObject spawnPoint in spawnPoints) {
             float sum = 0;
@@ -65,8 +73,8 @@ public class GameManager : Photon.PunBehaviour {
             }
             float avg = sum / players.Count;
             Debug.Log(avg);
-            if(avg <= minAvgDistance) {
-                minAvgDistance = avg;
+            if(avg >= maxAvgDistance) {
+                maxAvgDistance = avg;
                 bestSpawnPoint = spawnPoint;
             }
         }
