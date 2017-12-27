@@ -9,6 +9,7 @@ namespace BulletFlick {
         [SerializeField] private float bulletSpeed = 40f;
         /*using animationcurve as a curve for multiplyer
          * x represents original bulletcurve y represents multipyer */
+        [SerializeField] private float maxInitBulletCurve = 500f;
         [SerializeField] private AnimationCurve curveMultiplyer;
         [SerializeField] private float bulletLifeLength = 3f;
         [SerializeField] private float maxCurve = 1f;
@@ -32,6 +33,9 @@ namespace BulletFlick {
             }
             bulletRigidbody.velocity = Vector3.zero;
             bulletRigidbody.angularVelocity = Vector3.zero;
+            //put initial bulletCurve in 0 to 1 range
+            bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(Mathf.Abs(bulletCurve.x), maxInitBulletCurve) / maxInitBulletCurve;
+            bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(Mathf.Abs(bulletCurve.y), maxInitBulletCurve) / maxInitBulletCurve;
             bulletCurve.x = Mathf.Sign(bulletCurve.x) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.x)) * maxCurve;
             bulletCurve.y = Mathf.Sign(bulletCurve.y) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.y)) * maxCurve;
             bulletCurve.z = 0;

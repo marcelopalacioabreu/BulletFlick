@@ -43,7 +43,7 @@ public class PlayerManager : Photon.MonoBehaviour {
             deadProperties["deaths"] = deaths + 1;
             PhotonNetwork.player.SetCustomProperties(deadProperties);
 
-            if (killerId != -1 || killerId == PhotonNetwork.player.ID) { 
+            if (killerId != -1 || killerId != PhotonNetwork.player.ID) { 
                 PhotonPlayer killer = PhotonPlayer.Find(killerId);
                 Hashtable killerProperties = killer.CustomProperties;
                 killerProperties["kills"] = ((int)killerProperties["kills"]) + 1;

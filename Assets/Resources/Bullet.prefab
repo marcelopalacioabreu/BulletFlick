@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 40
+  maxInitBulletCurve: 500
   curveMultiplyer:
     serializedVersion: 2
     m_Curve:
@@ -210,20 +211,14 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.073647544
-      value: 0.71860707
-      inSlope: 9.983497
-      outSlope: 9.983497
+      time: 0.49932855
+      value: 0.4989928
+      inSlope: 2.4211452
+      outSlope: 2.4211452
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.15007325
+      time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.20039245
-      value: 0.99715275
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -231,7 +226,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   bulletLifeLength: 3
-  maxCurve: 2
+  maxCurve: 2.5
   raycastLength: 0.85
   bodyDamage: 50
   headDamage: 100

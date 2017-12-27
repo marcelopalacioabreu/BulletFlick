@@ -22,7 +22,7 @@ namespace BulletFlick {
             bulletPool = new List<GameObject>();
         }
 
-        void Update () {
+        void LateUpdate () {
             if (!photonView.isMine) {
                 return;
             }
@@ -30,7 +30,7 @@ namespace BulletFlick {
             currentCoolTime -= Time.deltaTime;
             if (Input.GetMouseButtonDown(0) && currentCoolTime <= 0) {
                 //have bullet be shot but dont do hit detection on it
-                Vector3 bulletCurve = EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) * Time.deltaTime;
+                Vector3 bulletCurve = (EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) / Time.deltaTime);
                 photonView.RPC("ShootVisualBullet", PhotonTargets.Others, bulletCurve, exitPoint.transform.position, exitPoint.transform.rotation);
                 //spawn local bullet that does damage
                 ShootDamageBullet(bulletCurve);
