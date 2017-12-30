@@ -15,6 +15,9 @@ namespace BulletFlick {
 
         private Dictionary<int, GameObject> players;
 
+        private float xSensitivity;
+        private float ySensitivity;
+        
         public static GameManager Instance () {
             return instance;
         }
@@ -28,6 +31,18 @@ namespace BulletFlick {
 
             spawnPoints = new List<GameObject>();
             players = new Dictionary<int, GameObject>();
+
+            if (!PlayerPrefs.HasKey("X Sensitivity")) {
+                PlayerPrefs.SetFloat("X Sensitivity", 5);
+                xSensitivity = 5;
+            }
+            if (!PlayerPrefs.HasKey("Y Sensitivity")) {
+                PlayerPrefs.SetFloat("Y Sensitivity", 2);
+                ySensitivity = 2;
+            }
+
+            xSensitivity = PlayerPrefs.GetFloat("X Sensitivity");
+            ySensitivity = PlayerPrefs.GetFloat("Y Sensitivity");
         }
 
         // Use this for initialization
@@ -70,7 +85,19 @@ namespace BulletFlick {
             StartCoroutine(RespawnCoroutine());
         }
 
-        private void OnPhotonPlayerDisconnected (PhotonPlayer otherPlayer) {
+        public void EnableLocalPlayer () {
+            if (players.ContainsKey(PhotonNetwork.player.ID)) {
+                players[PhotonNetwork.player.ID].GetComponent<PlayerManager>().EnablePlayer();
+            }
+        }
+
+        public void DisableLocalPlayer() {
+            if (players.ContainsKey(PhotonNetwork.player.ID)) {
+                players[PhotonNetwork.player.ID].GetComponent<PlayerManager>().DisablePlayer();
+            }
+        }
+
+         private void OnPhotonPlayerDisconnected (PhotonPlayer otherPlayer) {
             RemovePlayer(otherPlayer.ID);
         }
 
@@ -114,6 +141,26 @@ namespace BulletFlick {
             Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
             GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
             AddPlayer(PhotonNetwork.player.ID, player);
+        }
+
+        public float XSensitivity {
+            get {
+                return xSensitivity;
+            }
+
+            set {
+                xSensitivity = value;
+            }
+        }
+
+        public float YSensitivity {
+            get {
+                return ySensitivity;
+            }
+
+            set {
+                ySensitivity = value;
+            }
         }
     }
 }

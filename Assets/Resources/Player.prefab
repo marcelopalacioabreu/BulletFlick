@@ -60,7 +60,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1338817436618484
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,8 +539,8 @@ MonoBehaviour:
   - {fileID: 114464026203220002}
   - {fileID: 4052610959359588}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 2
+  instantiationId: 2
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114323561401476326
@@ -579,13 +579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdc2541666164d73b710e9d51706999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 5
-  sensitivityY: 2
   maximumX: 360
   minimumX: -360
   maximumY: 60
   minimumY: -60
-  cursorLockMode: 1
   playerCamera: {fileID: 4527404740733714}
 --- !u!114 &114464026203220002
 MonoBehaviour:
@@ -658,7 +655,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1668367870678024}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 061965ab75a0e4d95977350cd3a1ab18, type: 3}
   m_Name: 
@@ -704,17 +701,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1320634650814596}
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 114972986684200058}
         m_MethodName: set_enabled
         m_Mode: 0
@@ -737,7 +723,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: ToggleEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      - m_Target: {fileID: 114647852872736196}
+        m_MethodName: set_enabled
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: BulletFlick.ToggleEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   playerBody: {fileID: 1766526481423568}
 --- !u!114 &114972986684200058
 MonoBehaviour:

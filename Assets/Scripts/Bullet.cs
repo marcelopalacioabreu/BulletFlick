@@ -69,7 +69,10 @@ namespace BulletFlick {
 
         void FixedUpdate () {
             if (Time.time >= startTime + bulletLifeLength) {
-                playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
+                //TODO: make bulletPool independent from player
+                if (playerOwner != null) {
+                    playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
+                }
                 gameObject.SetActive(false);
             } else {
                 bulletRigidbody.velocity = transform.forward * bulletSpeed;
@@ -94,8 +97,9 @@ namespace BulletFlick {
                         .RPC("Damage", PhotonTargets.All, bodyDamage, PhotonNetwork.player.ID);
                 }
                 playerOwner.GetComponent<PlayerManager>().HitOtherPlayer();
+            } else {
+                fXManager.SpawnBulletSplash(position, normal);
             }
-            fXManager.SpawnBulletSplash(position, normal);
             playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
             gameObject.SetActive(false);
         }

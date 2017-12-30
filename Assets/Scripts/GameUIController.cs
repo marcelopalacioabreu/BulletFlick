@@ -8,6 +8,8 @@ namespace BulletFlick {
     public class GameUIController : MonoBehaviour {
         [SerializeField] private GameObject scoreboard;
         [SerializeField] private GameObject menu;
+        [SerializeField] private Slider xSensitivitySlider;
+        [SerializeField] private Slider ySensitivitySlider;
 
         [SerializeField] private CursorLockMode cursorLockMode = CursorLockMode.Locked;
 
@@ -23,10 +25,15 @@ namespace BulletFlick {
 
             menu.SetActive(false);
             showMenu = false;
+
+            
         }
 
         private void Start () {
             gameManager = GameManager.Instance();
+
+            xSensitivitySlider.value = gameManager.XSensitivity;
+            ySensitivitySlider.value = gameManager.YSensitivity;
         }
 
         // Update is called once per frame
@@ -42,9 +49,11 @@ namespace BulletFlick {
                 showMenu = !showMenu;
                 menu.SetActive(showMenu);
                 if (showMenu) {
+                    gameManager.DisableLocalPlayer();
                     cursorLockMode = CursorLockMode.None;
                     Cursor.visible = true;
                 } else {
+                    gameManager.EnableLocalPlayer();
                     cursorLockMode = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
@@ -65,6 +74,16 @@ namespace BulletFlick {
                 }
             }
             scoreboardText.text = text.ToString();
+        }
+
+        public void UpdateXSensitivity(float sensitivity) {
+            PlayerPrefs.SetFloat("X Sensitivity", sensitivity);
+            gameManager.XSensitivity = sensitivity;
+        }
+
+        public void UpdateYSensitivity(float sensitivity) {
+            PlayerPrefs.SetFloat("Y Sensitivity", sensitivity);
+            gameManager.YSensitivity = sensitivity;
         }
     }
 }

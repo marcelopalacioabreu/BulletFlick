@@ -6,10 +6,6 @@ namespace BulletFlick {
     //place this class on the player root
     public class MouseLook : MonoBehaviour {
 
-
-        [SerializeField] private float sensitivityX = 5f;
-        [SerializeField] private float sensitivityY = 2f;
-
         [SerializeField] private float maximumX = 360f;
         [SerializeField] private float minimumX = -360f;
 
@@ -20,20 +16,23 @@ namespace BulletFlick {
 
         private float curRotationX = 0f;
         private float curRotationY = 0f;
-
+        
         //Use body for x and camera for y
         private Quaternion curBodyRotation;
         private Quaternion curCameraRotation;
 
+        private GameManager gameManager;
+
         void Start () {
+            gameManager = GameManager.Instance();
+
             curBodyRotation = transform.localRotation;
             curCameraRotation = playerCamera.localRotation;
         }
 
         void Update () {
-
-            curRotationX += Input.GetAxis("Mouse X") * sensitivityX;
-            curRotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+            curRotationX += Input.GetAxis("Mouse X") * gameManager.XSensitivity;
+            curRotationY += Input.GetAxis("Mouse Y") * gameManager.YSensitivity;
 
             curRotationX = ClampAngle(curRotationX, minimumX, maximumX);
             curRotationY = ClampAngle(curRotationY, minimumY, maximumY);

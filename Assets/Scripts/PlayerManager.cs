@@ -21,12 +21,14 @@ namespace BulletFlick {
 
         void Start () {
             gameManager = GameManager.Instance();
+
             if (photonView.isMine) {
                 defaultCamera = Camera.main.gameObject;
                 playerBody.layer = LayerMask.NameToLayer("My Player");
             } else {
                 playerBody.layer = LayerMask.NameToLayer("Other Player");
             }
+
             EnablePlayer();
             gameManager.AddPlayer(photonView.ownerId, gameObject);
             playerUIController = GetComponent<PlayerUIController>();
@@ -61,10 +63,16 @@ namespace BulletFlick {
             playerUIController.ShowHitmarker();
         }
 
-        private void EnablePlayer () {
+        public void EnablePlayer () {
             if (photonView.isMine) {
                 defaultCamera.SetActive(false);
                 onToggleLocal.Invoke(true);
+            }
+        }
+
+        public void DisablePlayer () {
+            if (photonView.isMine) {
+                onToggleLocal.Invoke(false);
             }
         }
 
