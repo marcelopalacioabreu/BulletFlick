@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059c027db751149e59097e8618777387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 40
+  bulletSpeed: 55
   maxInitBulletCurve: 500
   curveMultiplyer:
     serializedVersion: 2
@@ -226,7 +226,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   bulletLifeLength: 3
-  maxCurve: 2.5
+  maxCurve: 3
   raycastLength: 0.85
   bodyDamage: 50
   headDamage: 100

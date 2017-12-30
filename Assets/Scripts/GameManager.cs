@@ -30,7 +30,7 @@ public class GameManager : Photon.PunBehaviour {
         playerProperties["deaths"] = 0;
         PhotonNetwork.player.SetCustomProperties(playerProperties);
         PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
-        Debug.Log("Set name: " + PhotonNetwork.player.NickName);
+        //TODO get all players
     }
 	
 	// Update is called once per frame
@@ -68,7 +68,6 @@ public class GameManager : Photon.PunBehaviour {
         if (!PhotonNetwork.isMasterClient) {
             return;
         }
-        Debug.Log("Change");
         Hashtable updatedProperties = (Hashtable)playerAndUpdatedProps[1];
         if (updatedProperties.ContainsKey("kills")) {
             if ((int)updatedProperties["kills"] >= 30) {

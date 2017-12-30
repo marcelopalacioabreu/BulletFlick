@@ -18,6 +18,8 @@ public class PlayerManager : Photon.MonoBehaviour {
 
     private GameManager gameManager;
 
+    private PlayerUIController playerUIController;
+
     void Start () {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         if (photonView.isMine) {
@@ -28,6 +30,7 @@ public class PlayerManager : Photon.MonoBehaviour {
         }
         EnablePlayer();
         gameManager.AddPlayer(photonView.ownerId,gameObject);
+        playerUIController = GetComponent<PlayerUIController>();
     }
     
     void FixedUpdate () {
@@ -43,7 +46,7 @@ public class PlayerManager : Photon.MonoBehaviour {
             deadProperties["deaths"] = deaths + 1;
             PhotonNetwork.player.SetCustomProperties(deadProperties);
 
-            if (killerId != -1 || killerId != PhotonNetwork.player.ID) { 
+            if (killerId != -1 && killerId != PhotonNetwork.player.ID) { 
                 PhotonPlayer killer = PhotonPlayer.Find(killerId);
                 Hashtable killerProperties = killer.CustomProperties;
                 killerProperties["kills"] = ((int)killerProperties["kills"]) + 1;
@@ -52,7 +55,11 @@ public class PlayerManager : Photon.MonoBehaviour {
             gameManager.Respawn();
         }
         gameManager.RemovePlayer(photonView.ownerId);
-        DisablePlayer();
+        DestroyPlayer();
+    }
+
+    public void HitOtherPlayer() {
+        playerUIController.ShowHitmarker();
     }
 
     private void EnablePlayer () {
@@ -62,10 +69,10 @@ public class PlayerManager : Photon.MonoBehaviour {
         }
     }
 
-    private void DisablePlayer () {
+    private void DestroyPlayer () {
         if (photonView.isMine) {
             defaultCamera.SetActive(true);
-            PhotonNetwork.Destroy(gameObject);
+            PhotonNetwork.Destroy(photonView);
         }
     }
 }

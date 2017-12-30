@@ -42,7 +42,7 @@ namespace BulletFlick {
         private void ShootDamageBullet(Vector3 bulletCurve) {
             GameObject bullet = GetBullet();
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-            bulletComponent.Init(bulletCurve, true);
+            bulletComponent.Init(bulletCurve, true, gameObject);
             currentCoolTime = cooldownTime;
         }
         
@@ -52,7 +52,7 @@ namespace BulletFlick {
             bullet.transform.position = bulletPosition;
             bullet.transform.rotation = bulletRotation;
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-            bulletComponent.Init(bulletCurve, false);
+            bulletComponent.Init(bulletCurve, false, null);
             currentCoolTime = cooldownTime;
         }
 

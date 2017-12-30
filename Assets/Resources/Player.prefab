@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 114730697607032428}
   - component: {fileID: 114647852872736196}
   - component: {fileID: 114400408647092272}
+  - component: {fileID: 114125429315253354}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -500,6 +501,21 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1320634650814596}
   m_Enabled: 1
+--- !u!114 &114125429315253354
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668367870678024}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ce012c6e5a28340a35020cab8b686a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairPrefab: {fileID: 1709158949380438, guid: dd878c6bbb9e1c04b9817e2fca3c79cc,
+    type: 2}
+  hitmarkerPrefab: {fileID: 1915759372329232, guid: dcf8150eedf49814d9b0b7d772aeddae,
+    type: 2}
 --- !u!114 &114217928586545232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -700,6 +716,17 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 114972986684200058}
+        m_MethodName: set_enabled
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114125429315253354}
         m_MethodName: set_enabled
         m_Mode: 0
         m_Arguments:

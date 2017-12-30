@@ -21,16 +21,19 @@ namespace BulletFlick {
         private Rigidbody bulletRigidbody;
         private TrailRenderer trailRenderer;
 
+        private GameObject playerOwner; 
+
         private float startTime;
         private bool isDamageBullet;
 
-        public void Init (Vector3 bulletCurve, bool isDamageBullet) {
+        public void Init (Vector3 bulletCurve, bool isDamageBullet, GameObject owner) {
             if (!bulletRigidbody) {
                 bulletRigidbody = GetComponent<Rigidbody>();
             }
             if (!trailRenderer) {
                 trailRenderer = GetComponent<TrailRenderer>();
             }
+            playerOwner = owner;
             bulletRigidbody.velocity = Vector3.zero;
             bulletRigidbody.angularVelocity = Vector3.zero;
             //put initial bulletCurve in 0 to 1 range
@@ -86,7 +89,7 @@ namespace BulletFlick {
                     root.GetComponent<PhotonView>()
                         .RPC("Damage", PhotonTargets.All, bodyDamage, PhotonNetwork.player.ID);
                 }
-
+                playerOwner.GetComponent<PlayerManager>().HitOtherPlayer();
             }
             Debug.Log("Hit");
             gameObject.SetActive(false);
