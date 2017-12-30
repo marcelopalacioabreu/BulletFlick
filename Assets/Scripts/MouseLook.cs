@@ -16,8 +16,6 @@ namespace BulletFlick {
         [SerializeField] private float maximumY = 60f;
         [SerializeField] private float minimumY = -60f;
 
-        [SerializeField] private CursorLockMode cursorLockMode = CursorLockMode.Locked;
-
         [SerializeField] private Transform playerCamera;
 
         private float curRotationX = 0f;
@@ -33,16 +31,6 @@ namespace BulletFlick {
         }
 
         void Update () {
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                cursorLockMode = CursorLockMode.None;
-                Cursor.visible = true;
-            } else if (Input.GetMouseButtonDown(0)) {
-                //TODO change to constants
-                cursorLockMode = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-
-            Cursor.lockState = cursorLockMode;
 
             curRotationX += Input.GetAxis("Mouse X") * sensitivityX;
             curRotationY += Input.GetAxis("Mouse Y") * sensitivityY;

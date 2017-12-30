@@ -13,7 +13,7 @@ namespace BulletFlick {
         [SerializeField] private AnimationCurve curveMultiplyer;
         [SerializeField] private float bulletLifeLength = 3f;
         [SerializeField] private float maxCurve = 1f;
-        [SerializeField] private float raycastLength = 0.85f;
+        [SerializeField] private float raycastLength = 0.95f;
 
         [SerializeField] private int bodyDamage = 50;
         [SerializeField] private int headDamage = 100;
@@ -25,6 +25,8 @@ namespace BulletFlick {
 
         private float startTime;
         private bool isDamageBullet;
+
+        private FXManager fXManager;
 
         public void Init (Vector3 bulletCurve, bool isDamageBullet, GameObject owner) {
             if (!bulletRigidbody) {
@@ -49,6 +51,10 @@ namespace BulletFlick {
             trailRenderer.Clear();
         }
 
+        void Start () {
+            fXManager = FXManager.Instance();     
+        }
+
         // Update is called once per frame
         void Update () {
             
@@ -56,13 +62,14 @@ namespace BulletFlick {
 
         void OnCollisionEnter (Collision collision) {
             if (!collision.gameObject.CompareTag("Gun")) {
-                Hit(collision.gameObject);
+                ContactPoint contact = collision.contacts[0];
+                Hit(collision.gameObject, contact.point, contact.normal);
             }
         }
 
         void FixedUpdate () {
-            //TODO: bulletmultiplyer curve
             if (Time.time >= startTime + bulletLifeLength) {
+                playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
                 gameObject.SetActive(false);
             } else {
                 bulletRigidbody.velocity = transform.forward * bulletSpeed;
@@ -70,16 +77,13 @@ namespace BulletFlick {
             }
 
             RaycastHit hit;
-
-            //TODO: replace magic number
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward),
                 out hit, raycastLength)) {
-
-                Hit(hit.transform.gameObject);
+                Hit(hit.transform.gameObject, hit.point, hit.normal);
             }
         }
 
-        private void Hit (GameObject other) {
+        private void Hit (GameObject other, Vector3 position, Vector3 normal) {
             GameObject root = other.transform.root.gameObject;
             if (isDamageBullet && root.CompareTag("Player")) {
                 if (other.CompareTag("Head")) {
@@ -91,7 +95,8 @@ namespace BulletFlick {
                 }
                 playerOwner.GetComponent<PlayerManager>().HitOtherPlayer();
             }
-            Debug.Log("Hit");
+            fXManager.SpawnBulletSplash(position, normal);
+            playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
             gameObject.SetActive(false);
         }
     }

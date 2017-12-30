@@ -11,7 +11,7 @@ namespace BulletFlick {
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private Transform exitPoint;
 
-        private List<GameObject> bulletPool;
+        private Queue<GameObject> bulletPool;
         private Quaternion lastGunRotation;
 
         
@@ -19,7 +19,7 @@ namespace BulletFlick {
 
 
         void Awake () {
-            bulletPool = new List<GameObject>();
+            bulletPool = new Queue<GameObject>();
         }
 
         void LateUpdate () {
@@ -57,18 +57,20 @@ namespace BulletFlick {
         }
 
         private GameObject GetBullet () {
-
-            foreach (GameObject bullet in bulletPool) {
-                if (!bullet.activeInHierarchy) {
-                    bullet.transform.position = exitPoint.position;
-                    bullet.transform.rotation = exitPoint.rotation;
-                    bullet.SetActive(true);
-                    return bullet;
-                }
+            if (bulletPool.Count > 0) {
+                GameObject bullet = bulletPool.Dequeue();
+                bullet.transform.position = exitPoint.position;
+                bullet.transform.rotation = exitPoint.rotation;
+                bullet.SetActive(true);
+                return bullet;
             }
+   
             GameObject newBullet = Instantiate(bulletPrefab, exitPoint.position, exitPoint.rotation);
-            bulletPool.Add(newBullet);
             return newBullet;
+        }
+
+        public void AddBulletToPool(GameObject bullet) {
+            bulletPool.Enqueue(bullet);
         }
 
         private Vector3 EulerAnglesDelta (Vector3 cur, Vector3 past) {
