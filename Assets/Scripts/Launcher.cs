@@ -26,7 +26,7 @@ namespace BulletFlick {
         }
 
         public void Connect () {
-            if (PhotonNetwork.connected) {
+            if (PhotonNetwork.connected && PhotonNetwork.connectedAndReady) {
                 PhotonNetwork.JoinRandomRoom();
             } else {
                 PhotonNetwork.ConnectUsingSettings(gameVersion);

@@ -10,6 +10,7 @@ namespace BulletFlick {
 
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject spawnPointHolder;
+        [SerializeField] private GameUIController gameUIController;
 
         private List<GameObject> spawnPoints;
 
@@ -60,11 +61,6 @@ namespace BulletFlick {
             //TODO get all players
         }
 
-        // Update is called once per frame
-        void Update () {
-
-        }
-
         public void AddPlayer (int id, GameObject player) {
             players[id] = player;
         }
@@ -72,7 +68,7 @@ namespace BulletFlick {
         public void RemovePlayer (int id) {
             players.Remove(id);
         }
-        //TODO add on disconnect listener
+
         public void OnLeftRoom () {
             SceneManager.LoadScene("Launcher");
         }
@@ -106,10 +102,11 @@ namespace BulletFlick {
                 return;
             }
             Hashtable updatedProperties = (Hashtable)playerAndUpdatedProps[1];
-            if (updatedProperties.ContainsKey("kills")) {
-                if ((int)updatedProperties["kills"] >= 30) {
-                    Debug.Log("Winner is " + ((PhotonPlayer)playerAndUpdatedProps[1]).NickName);
-                }
+            if (updatedProperties.ContainsKey("kills") && (int)updatedProperties["kills"] >= 30) {
+                Debug.Log(((PhotonPlayer)playerAndUpdatedProps[0]).NickName);
+                gameUIController.Win(((PhotonPlayer)playerAndUpdatedProps[0]).NickName);
+                Time.timeScale = 0;
+                StartCoroutine(EndGame());
             }
         }
 
@@ -141,6 +138,13 @@ namespace BulletFlick {
             Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
             GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
             AddPlayer(PhotonNetwork.player.ID, player);
+        }
+
+        private IEnumerator EndGame () {
+            yield return new WaitForSecondsRealtime(4f);
+            PhotonNetwork.room.IsOpen = false;
+            Time.timeScale = 1;
+            PhotonNetwork.LeaveRoom();
         }
 
         public float XSensitivity {

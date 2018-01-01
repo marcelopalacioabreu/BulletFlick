@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace BulletFlick {
     public class GameUIController : MonoBehaviour {
+        [SerializeField] private Text WinText;
         [SerializeField] private GameObject scoreboard;
         [SerializeField] private GameObject menu;
         [SerializeField] private Slider xSensitivitySlider;
@@ -24,9 +25,7 @@ namespace BulletFlick {
             scoreboard.SetActive(false);
 
             menu.SetActive(false);
-            showMenu = false;
-
-            
+            showMenu = false;            
         }
 
         private void Start () {
@@ -59,6 +58,11 @@ namespace BulletFlick {
                 }
             }
             Cursor.lockState = cursorLockMode;
+        }
+
+        public void Win(string winner) {
+            WinText.text = winner + " Wins!";
+            WinText.enabled = true;
         }
 
         public void UpdateScoreboard () {
