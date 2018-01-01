@@ -26,19 +26,15 @@ namespace BulletFlick {
         }
 
         public void Connect () {
-            if (PhotonNetwork.connected && PhotonNetwork.connectedAndReady) {
-                PhotonNetwork.JoinRandomRoom();
-            } else {
+            if (!PhotonNetwork.connected) { 
                 PhotonNetwork.ConnectUsingSettings(gameVersion);
             }
         }
 
-        public override void OnConnectedToMaster () {
-            PhotonNetwork.JoinRandomRoom();
-        }
-
-        public override void OnDisconnectedFromPhoton () {
-            
+        public void Play() {
+            if (PhotonNetwork.connectedAndReady) {
+                PhotonNetwork.JoinRandomRoom();
+            }
         }
 
         public override void OnJoinedRoom () {
@@ -48,7 +44,5 @@ namespace BulletFlick {
         public override void OnPhotonRandomJoinFailed (object[] codeAndMsg) {
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = maxPlayers }, null);
         }
-
-       
     }
 }

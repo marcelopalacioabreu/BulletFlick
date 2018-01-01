@@ -87,7 +87,7 @@ namespace BulletFlick {
         private void DestroyPlayer () {
             if (photonView.isMine) {
                 defaultCamera.SetActive(true);
-                PhotonNetwork.Destroy(photonView);
+                PhotonNetwork.Destroy(gameObject);
             }
         }
     }

@@ -100,8 +100,11 @@ namespace BulletFlick {
             } else {
                 fXManager.SpawnBulletSplash(position, normal);
             }
-            playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
-            gameObject.SetActive(false);
+            //TODO
+            if (playerOwner != null) {
+                playerOwner.GetComponent<Shoot>().AddBulletToPool(gameObject);
+                gameObject.SetActive(false);
+            }
         }
     }
 }

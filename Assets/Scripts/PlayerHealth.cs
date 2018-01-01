@@ -28,9 +28,11 @@ namespace BulletFlick {
 
         [PunRPC]
         public void Damage (int damage, int playerId) {
-            currentHealth -= damage;
-            if (currentHealth <= 0) {
-                playerManager.Die(playerId);
+            if (currentHealth > 0) {
+                currentHealth -= damage;
+                if (currentHealth <= 0) {
+                    playerManager.Die(playerId);
+                }
             }
         }
     }
