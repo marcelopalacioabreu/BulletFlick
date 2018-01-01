@@ -24,6 +24,7 @@ namespace BulletFlick {
         }
 
         void Awake () {
+            Application.runInBackground = true;
             if(instance != null && instance != this) {
                 Destroy(gameObject);
             } else {

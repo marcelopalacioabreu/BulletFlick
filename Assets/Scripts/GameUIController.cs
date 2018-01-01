@@ -44,7 +44,7 @@ namespace BulletFlick {
                 scoreboard.SetActive(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (Input.GetKeyDown(KeyCode.M)) {
                 showMenu = !showMenu;
                 menu.SetActive(showMenu);
                 if (showMenu) {

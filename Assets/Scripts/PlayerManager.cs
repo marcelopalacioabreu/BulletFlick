@@ -12,6 +12,7 @@ namespace BulletFlick {
         [SerializeField] private ToggleEvent onToggleLocal;
 
         [SerializeField] private GameObject playerBody;
+        [SerializeField] private GameObject playerCamera;
 
         private GameObject defaultCamera;
 
@@ -29,12 +30,13 @@ namespace BulletFlick {
                 playerBody.layer = LayerMask.NameToLayer("Other Player");
             }
 
-            EnablePlayer();
+            EnablePlayer(true);
             gameManager.AddPlayer(photonView.ownerId, gameObject);
             playerUIController = GetComponent<PlayerUIController>();
         }
 
         void FixedUpdate () {
+
         }
 
         public void Die (int killerId) {
@@ -63,16 +65,22 @@ namespace BulletFlick {
             playerUIController.ShowHitmarker();
         }
 
-        public void EnablePlayer () {
+        public void EnablePlayer (bool changeCamera = false) {
             if (photonView.isMine) {
                 defaultCamera.SetActive(false);
                 onToggleLocal.Invoke(true);
+                if (changeCamera) {
+                    playerCamera.SetActive(true);
+                }
             }
         }
 
-        public void DisablePlayer () {
+        public void DisablePlayer (bool changeCamera = false) {
             if (photonView.isMine) {
                 onToggleLocal.Invoke(false);
+                if (changeCamera) {
+                    playerCamera.SetActive(false);
+                }
             }
         }
 
