@@ -33,7 +33,6 @@ namespace BulletFlick {
                     = new Vector2(0, -50 * (i - 1));
 
                 string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-                Debug.Log(scenePath);
                 string sceneName = scenePath.Substring(scenePath.LastIndexOf("/") + 1,
                     scenePath.LastIndexOf(".")-(scenePath.LastIndexOf("/") + 1));
 
@@ -58,7 +57,6 @@ namespace BulletFlick {
         }
 
         public void Play(int index) {
-            Debug.Log(index);
             mapIndex = index;
             if (PhotonNetwork.connectedAndReady) {
                 Hashtable roomProperties = new Hashtable() { { "map", mapIndex } };

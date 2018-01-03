@@ -32,10 +32,8 @@ namespace BulletFlick {
                 hasDoubleJumped = false;
             }
             if (Input.GetButtonDown("Jump") && (!hasDoubleJumped || controller.isGrounded)) {
-                Debug.Log("Jump");
                 moveDirection.y = jumpSpeed;
                 if (!controller.isGrounded) {
-                    Debug.Log("Double");
                     hasDoubleJumped = true;
                 }
             }
