@@ -59,8 +59,8 @@ namespace BulletFlick {
         public void Play(int index) {
             mapIndex = index;
             if (PhotonNetwork.connectedAndReady) {
-                Hashtable roomProperties = new Hashtable() { { "map", mapIndex } };
-                PhotonNetwork.JoinRandomRoom(roomProperties, maxPlayers);
+                //Hashtable roomProperties = new Hashtable() { { "map", mapIndex } };
+                PhotonNetwork.JoinRandomRoom();
             }
         }
 

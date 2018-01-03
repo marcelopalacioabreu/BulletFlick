@@ -12,8 +12,6 @@ namespace BulletFlick {
         [SerializeField] private Slider xSensitivitySlider;
         [SerializeField] private Slider ySensitivitySlider;
 
-        [SerializeField] private CursorLockMode cursorLockMode = CursorLockMode.Locked;
-
         private GameManager gameManager;
 
         private bool showMenu;
@@ -33,6 +31,7 @@ namespace BulletFlick {
 
             xSensitivitySlider.value = gameManager.XSensitivity;
             ySensitivitySlider.value = gameManager.YSensitivity;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         // Update is called once per frame
@@ -49,15 +48,14 @@ namespace BulletFlick {
                 menu.SetActive(showMenu);
                 if (showMenu) {
                     gameManager.DisableLocalPlayer();
-                    cursorLockMode = CursorLockMode.None;
+                    Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
                 } else {
                     gameManager.EnableLocalPlayer();
-                    cursorLockMode = CursorLockMode.Locked;
+                    Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
             }
-            Cursor.lockState = cursorLockMode;
         }
 
         public void Win(string winner) {
