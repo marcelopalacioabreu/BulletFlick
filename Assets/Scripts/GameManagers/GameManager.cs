@@ -18,14 +18,14 @@ namespace BulletFlick {
 
         private float xSensitivity;
         private float ySensitivity;
-        
+
         public static GameManager Instance () {
             return instance;
         }
 
         void Awake () {
             Application.runInBackground = true;
-            if(instance != null && instance != this) {
+            if (instance != null && instance != this) {
                 Destroy(gameObject);
             } else {
                 instance = this;
@@ -52,14 +52,32 @@ namespace BulletFlick {
             foreach (Transform child in spawnPointHolder.transform) {
                 spawnPoints.Add(child.gameObject);
             }
+
             Vector3 spawnPoint = FindBestSpawnPoint().transform.position;
             PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint, Quaternion.identity, 0);
+
             Hashtable playerProperties = new Hashtable();
             playerProperties["kills"] = 0;
             playerProperties["deaths"] = 0;
             PhotonNetwork.player.SetCustomProperties(playerProperties);
             PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
-            //TODO get all players
+
+            PhotonNetwork.OnEventCall += OnEventRaised;
+            //TODO get all players for playerList
+        }
+
+        public void OnEventRaised (byte eventcode, object content, int senderid) {
+            //gameover
+            if (eventcode == 0) {
+                Debug.Log("Game over");
+                GameOver((string)content);
+            }
+        }
+
+        public void GameOver (string winner) {
+            gameUIController.Win(winner);
+            Time.timeScale = 0;
+            StartCoroutine(EndGame());
         }
 
         public void AddPlayer (int id, GameObject player) {
@@ -74,6 +92,7 @@ namespace BulletFlick {
             SceneManager.LoadScene("Launcher");
         }
 
+        //Used by exit button
         public void LeaveRoom () {
             PhotonNetwork.LeaveRoom();
         }
@@ -88,13 +107,13 @@ namespace BulletFlick {
             }
         }
 
-        public void DisableLocalPlayer() {
+        public void DisableLocalPlayer () {
             if (players.ContainsKey(PhotonNetwork.player.ID)) {
                 players[PhotonNetwork.player.ID].GetComponent<PlayerManager>().DisablePlayer();
             }
         }
 
-         private void OnPhotonPlayerDisconnected (PhotonPlayer otherPlayer) {
+        private void OnPhotonPlayerDisconnected (PhotonPlayer otherPlayer) {
             RemovePlayer(otherPlayer.ID);
         }
 
@@ -102,12 +121,13 @@ namespace BulletFlick {
             if (!PhotonNetwork.isMasterClient) {
                 return;
             }
+            Debug.Log("Game");
             Hashtable updatedProperties = (Hashtable)playerAndUpdatedProps[1];
-            if (updatedProperties.ContainsKey("kills") && (int)updatedProperties["kills"] >= 30) {
-                Debug.Log(((PhotonPlayer)playerAndUpdatedProps[0]).NickName);
-                gameUIController.Win(((PhotonPlayer)playerAndUpdatedProps[0]).NickName);
-                Time.timeScale = 0;
-                StartCoroutine(EndGame());
+            if (updatedProperties.ContainsKey("kills") && (int)updatedProperties["deaths"] >= 1) {
+                RaiseEventOptions options = RaiseEventOptions.Default;
+                options.CachingOption = EventCaching.AddToRoomCacheGlobal;
+                options.Receivers = ReceiverGroup.All;
+                PhotonNetwork.RaiseEvent(0, ((PhotonPlayer)playerAndUpdatedProps[0]).NickName, true, options);
             }
         }
 
@@ -124,7 +144,6 @@ namespace BulletFlick {
                     sum += Vector3.Distance(player.Value.transform.position, spawnPoint.transform.position);
                 }
                 float avg = sum / players.Count;
-                Debug.Log(avg);
                 if (avg >= maxAvgDistance) {
                     maxAvgDistance = avg;
                     bestSpawnPoint = spawnPoint;

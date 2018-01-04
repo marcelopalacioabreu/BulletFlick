@@ -1525,12 +1525,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f37e2783d3973743ac30a4658568277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WinText: {fileID: 766806382}
+  winText: {fileID: 766806382}
   scoreboard: {fileID: 2006751438}
   menu: {fileID: 305073989}
   xSensitivitySlider: {fileID: 745618151}
   ySensitivitySlider: {fileID: 745618150}
-  cursorLockMode: 1
 --- !u!114 &1973094551
 MonoBehaviour:
   m_ObjectHideFlags: 0
