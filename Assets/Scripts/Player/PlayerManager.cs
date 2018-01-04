@@ -24,9 +24,11 @@ namespace BulletFlick {
             gameManager = GameManager.Instance();
 
             if (photonView.isMine) {
+                GetComponent<PlayerMove>().enabled = true;
                 defaultCamera = Camera.main.gameObject;
                 playerBody.layer = LayerMask.NameToLayer("My Player");
             } else {
+                GetComponent<PlayerMove>().enabled = false;
                 playerBody.layer = LayerMask.NameToLayer("Other Player");
             }
 

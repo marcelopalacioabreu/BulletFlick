@@ -8,8 +8,10 @@ namespace BulletFlick {
 
         private const float Gravity = 9.8f;
 
-        [SerializeField] public float speed = 3.0f;
-        [SerializeField] public float jumpSpeed = 5.0f;
+        public bool canPlayerInput;
+
+        public float speed = 3.0f;
+        public float jumpSpeed = 5.0f;
 
         [SerializeField] private Transform playerCamera;
 
@@ -25,20 +27,26 @@ namespace BulletFlick {
         }
         
         void Update () {
-            if (controller.isGrounded) {
-                moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                moveDirection = playerCamera.transform.TransformDirection(moveDirection);
-                moveDirection *= speed;
-                hasDoubleJumped = false;
-            }
-            if (Input.GetButtonDown("Jump") && (!hasDoubleJumped || controller.isGrounded)) {
-                moveDirection.y = jumpSpeed;
-                if (!controller.isGrounded) {
-                    hasDoubleJumped = true;
+            if (canPlayerInput) {
+                if (controller.isGrounded) {
+                    moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                    moveDirection = playerCamera.transform.TransformDirection(moveDirection);
+                    moveDirection *= speed;
+                    hasDoubleJumped = false;
+                }
+                if (Input.GetButtonDown("Jump") && (!hasDoubleJumped || controller.isGrounded)) {
+                    moveDirection.y = jumpSpeed;
+                    if (!controller.isGrounded) {
+                        hasDoubleJumped = true;
+                    }
                 }
             }
             moveDirection.y -= Gravity * Time.deltaTime;
             controller.Move(moveDirection * Time.deltaTime);
+        }
+
+        public void CanPlayerInput(bool inputToggle) {
+            canPlayerInput = inputToggle;
         }
     }
 }

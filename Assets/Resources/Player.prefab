@@ -549,11 +549,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1668367870678024}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15f6e354a39784f1bb9b32cc6eeb54bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canPlayerInput: 0
   speed: 3.5
   jumpSpeed: 6
   playerCamera: {fileID: 4527404740733714}
@@ -680,7 +681,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114323561401476326}
-        m_MethodName: set_enabled
+        m_MethodName: CanPlayerInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
