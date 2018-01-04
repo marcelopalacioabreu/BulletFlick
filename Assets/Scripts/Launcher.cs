@@ -43,6 +43,10 @@ namespace BulletFlick {
             Connect();
         }
 
+        public void SetPlayerName(string name) {
+            PhotonNetwork.playerName = name;
+        }
+
         public void Connect () {
             if (!PhotonNetwork.connected) { 
                 PhotonNetwork.ConnectUsingSettings(gameVersion);
@@ -58,6 +62,9 @@ namespace BulletFlick {
         }
 
         public override void OnJoinedRoom () {
+            if (PhotonNetwork.playerName.Length == 0) {
+                PhotonNetwork.playerName = "Scrub";
+            }
             SceneManager.LoadScene(mapIndex);
         }
 

@@ -60,8 +60,6 @@ namespace BulletFlick {
             playerProperties["kills"] = 0;
             playerProperties["deaths"] = 0;
             PhotonNetwork.player.SetCustomProperties(playerProperties);
-            PhotonNetwork.player.NickName = "Player " + PhotonNetwork.playerList.Length;
-
             PhotonNetwork.OnEventCall += OnEventRaised;
             //TODO get all players for playerList
         }
