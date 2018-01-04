@@ -19,7 +19,6 @@ namespace BulletFlick {
         private int mapIndex;
 
         void Awake () {
-            PhotonNetwork.autoJoinLobby = false;
             PhotonNetwork.automaticallySyncScene = true;
         }
 
@@ -28,7 +27,7 @@ namespace BulletFlick {
             //start at 1 to skip launcher
             for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++) {
                 GameObject mapOption = Instantiate(mapOptionPrefab);
-                mapOption.transform.parent = mapContent.transform;
+                mapOption.transform.SetParent(mapContent.transform, true);
                 mapOption.GetComponent<RectTransform>().anchoredPosition 
                     = new Vector2(0, -50 * (i - 1));
 
@@ -41,13 +40,7 @@ namespace BulletFlick {
                 int indexCopy = i;
                 mapOption.GetComponentInChildren<Button>().onClick.AddListener(delegate { Play(indexCopy); });
             }
-
             Connect();
-        }
-
-        // Update is called once per frame
-        void Update () {
-
         }
 
         public void Connect () {
@@ -59,8 +52,8 @@ namespace BulletFlick {
         public void Play(int index) {
             mapIndex = index;
             if (PhotonNetwork.connectedAndReady) {
-                //Hashtable roomProperties = new Hashtable() { { "map", mapIndex } };
-                PhotonNetwork.JoinRandomRoom();
+                Hashtable roomProperties = new Hashtable() { { "map", mapIndex } };
+                PhotonNetwork.JoinRandomRoom(roomProperties, 0);
             }
         }
 
@@ -75,7 +68,7 @@ namespace BulletFlick {
                 CustomRoomPropertiesForLobby = propForLobby,
                 CustomRoomProperties = new Hashtable() { {"map", mapIndex} }
             };
-            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = maxPlayers }, null);
+            PhotonNetwork.CreateRoom(null, roomOptions, null);
         }
     }
 }
