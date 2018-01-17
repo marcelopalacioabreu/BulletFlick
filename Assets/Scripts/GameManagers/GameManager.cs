@@ -119,9 +119,8 @@ namespace BulletFlick {
             if (!PhotonNetwork.isMasterClient) {
                 return;
             }
-            Debug.Log("Game");
             Hashtable updatedProperties = (Hashtable)playerAndUpdatedProps[1];
-            if (updatedProperties.ContainsKey("kills") && (int)updatedProperties["deaths"] >= 1) {
+            if (updatedProperties.ContainsKey("kills") && (int)updatedProperties["kills"] >= 30) {
                 RaiseEventOptions options = RaiseEventOptions.Default;
                 options.CachingOption = EventCaching.AddToRoomCacheGlobal;
                 options.Receivers = ReceiverGroup.All;

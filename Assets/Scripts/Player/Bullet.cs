@@ -6,17 +6,20 @@ namespace BulletFlick {
 
     public class Bullet : MonoBehaviour {
          
-        [SerializeField] private float bulletSpeed = 40f;
+        [SerializeField] private float maxBulletSpeed = 55f;
         /*using animationcurve as a curve for multiplyer
          * x represents original bulletcurve y represents multipyer */
-        [SerializeField] private float maxInitBulletCurve = 500f;
+        [SerializeField] private float maxInitBulletCurve = 400f;
         [SerializeField] private AnimationCurve curveMultiplyer;
+        [SerializeField] private AnimationCurve speedMultiplyer;
         [SerializeField] private float bulletLifeLength = 3f;
         [SerializeField] private float maxCurve = 1f;
         [SerializeField] private float raycastLength = 0.95f;
 
         [SerializeField] private int bodyDamage = 50;
         [SerializeField] private int headDamage = 100;
+
+        private float bulletSpeed;
         private Vector3 bulletCurve;
         private Rigidbody bulletRigidbody;
         private TrailRenderer trailRenderer;
@@ -38,12 +41,17 @@ namespace BulletFlick {
             playerOwner = owner;
             bulletRigidbody.velocity = Vector3.zero;
             bulletRigidbody.angularVelocity = Vector3.zero;
+
             //put initial bulletCurve in 0 to 1 range
             bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(Mathf.Abs(bulletCurve.x), maxInitBulletCurve) / maxInitBulletCurve;
             bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(Mathf.Abs(bulletCurve.y), maxInitBulletCurve) / maxInitBulletCurve;
+            bulletCurve.z = 0;
+            
+            bulletSpeed = speedMultiplyer.Evaluate(Mathf.Min(1,bulletCurve.magnitude)) * maxBulletSpeed;
+
             bulletCurve.x = Mathf.Sign(bulletCurve.x) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.x)) * maxCurve;
             bulletCurve.y = Mathf.Sign(bulletCurve.y) * curveMultiplyer.Evaluate(Mathf.Abs(bulletCurve.y)) * maxCurve;
-            bulletCurve.z = 0;
+       
             this.bulletCurve = bulletCurve;
             this.isDamageBullet = isDamageBullet;
             startTime = Time.time;
