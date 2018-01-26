@@ -6,17 +6,20 @@ namespace BulletFlick {
     public class Shoot : Photon.MonoBehaviour {
         
         [SerializeField] private float cooldownTime = 1f;
+        [SerializeField] private float maxCurveTime = .3f;
 
         [SerializeField] private GameObject arm;
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private Transform exitPoint;
 
         private Queue<GameObject> bulletPool;
-        private Quaternion lastGunRotation;
+        private Quaternion startGunRotation;
 
         
         private float currentCoolTime;
+        private float startBulletTime;
 
+        private bool hasBeenPressedDown = false;
 
         void Awake () {
             bulletPool = new Queue<GameObject>();
@@ -28,22 +31,29 @@ namespace BulletFlick {
             }
 
             currentCoolTime -= Time.deltaTime;
-            if (Input.GetMouseButtonDown(0) && currentCoolTime <= 0) {
-                //have bullet be shot but dont do hit detection on it
-                Vector3 bulletCurve = (EulerAnglesDelta(arm.transform.localEulerAngles, lastGunRotation.eulerAngles) / Time.deltaTime);
+            if (Input.GetMouseButtonDown(0)) {
+                startGunRotation = arm.transform.localRotation;
+                startBulletTime = Time.time;
+                hasBeenPressedDown = true;
+            }
+            
+            if ((Input.GetMouseButtonUp(0) || (Time.time-startBulletTime) >= maxCurveTime) 
+                && hasBeenPressedDown && currentCoolTime <= 0) {
+
+                Vector3 bulletCurve = (EulerAnglesDelta(arm.transform.localEulerAngles, startGunRotation.eulerAngles) / (Time.time-startBulletTime));
+                //have bullet be shot on other players but no hit detection
                 photonView.RPC("ShootVisualBullet", PhotonTargets.Others, bulletCurve, exitPoint.transform.position, exitPoint.transform.rotation);
                 //spawn local bullet that does damage
                 ShootDamageBullet(bulletCurve);
+                hasBeenPressedDown = false;
+                currentCoolTime = cooldownTime;
             }
-
-            lastGunRotation = arm.transform.localRotation;
         }
 
         private void ShootDamageBullet(Vector3 bulletCurve) {
             GameObject bullet = GetBullet();
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-            bulletComponent.Init(bulletCurve, true, gameObject);
-            currentCoolTime = cooldownTime;
+            bulletComponent.Init(bulletCurve, true, gameObject);            
         }
         
         [PunRPC]
@@ -53,7 +63,6 @@ namespace BulletFlick {
             bullet.transform.rotation = bulletRotation;
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
             bulletComponent.Init(bulletCurve, false, null);
-            currentCoolTime = cooldownTime;
         }
 
         private GameObject GetBullet () {

@@ -42,6 +42,8 @@ namespace BulletFlick {
             bulletRigidbody.velocity = Vector3.zero;
             bulletRigidbody.angularVelocity = Vector3.zero;
 
+            Debug.Log(bulletCurve);
+
             //put initial bulletCurve in 0 to 1 range
             bulletCurve.x = Mathf.Sign(bulletCurve.x) * Mathf.Min(Mathf.Abs(bulletCurve.x), maxInitBulletCurve) / maxInitBulletCurve;
             bulletCurve.y = Mathf.Sign(bulletCurve.y) * Mathf.Min(Mathf.Abs(bulletCurve.y), maxInitBulletCurve) / maxInitBulletCurve;

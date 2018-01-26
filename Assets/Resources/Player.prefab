@@ -662,6 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownTime: 0.65
+  maxCurveTime: 1
   arm: {fileID: 1338817436618484}
   bulletPrefab: {fileID: 1587649492728856, guid: 99cdef5f6e92f43c1a0dd44735a7185d,
     type: 2}
@@ -750,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b3e73fc11f8419494e2e9eec1d0fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armSpeed: 6
+  armSpeed: 10
   playerCamera: {fileID: 4527404740733714}
 --- !u!124 &124218563584502000
 Behaviour:
